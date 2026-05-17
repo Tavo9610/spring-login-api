@@ -1,5 +1,6 @@
 package com.gustavo.login_api.service;
 
+import com.gustavo.login_api.dto.UserRequestDTO;
 import com.gustavo.login_api.dto.UserResponseDTO;
 import com.gustavo.login_api.entity.User;
 import com.gustavo.login_api.exception.ResourceNotFoundException;
@@ -22,19 +23,25 @@ public class UserService {
         this.encoder = encoder;
     }
 
-    public UserResponseDTO save(User user) {
+    public UserResponseDTO save(UserRequestDTO userRequestDTO) throws Exception {
 
-        user.setPassword(
-                encoder.encode(user.getPassword())
-        );
+        User user = new User(userRequestDTO.getUsername(),encoder.encode(userRequestDTO.getPassword()),userRequestDTO.getRole());
 
-        User savedUser = repository.save(user);
+        try {
+            User savedUser = repository.save(user);
 
-        return new UserResponseDTO(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getRole()
-        );
+            return new UserResponseDTO(
+                    savedUser.getId(),
+                    savedUser.getUsername(),
+                    savedUser.getRole()
+            );
+
+        } catch (Exception e){
+            throw new Exception("Error saving users");
+        }
+
+
+
     }
 
     public List<UserResponseDTO> getAllUsers() {

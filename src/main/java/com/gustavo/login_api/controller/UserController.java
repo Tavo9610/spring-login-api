@@ -1,5 +1,6 @@
 package com.gustavo.login_api.controller;
 
+import com.gustavo.login_api.dto.UserRequestDTO;
 import com.gustavo.login_api.dto.UserResponseDTO;
 import com.gustavo.login_api.entity.User;
 import com.gustavo.login_api.service.UserService;
@@ -20,13 +21,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody UserRequestDTO userRequestDTO)  {
 
-        UserResponseDTO savedUser = service.save(user);
+        try{
+            UserResponseDTO savedUser = service.save(userRequestDTO);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(savedUser);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(savedUser);
+        }
+         catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+         }
     }
 
     @GetMapping

@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +24,11 @@ public class User {
     private String password;
 
     private String role;
+
+    public User (String username, String password, String role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
 }

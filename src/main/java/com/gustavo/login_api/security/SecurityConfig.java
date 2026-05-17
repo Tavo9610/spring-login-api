@@ -19,22 +19,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
-
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults()); // <-- este metodo no funcaba ya
-
-        return http.build();
-    }
-    */
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
@@ -44,8 +28,11 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(HttpMethod.POST, "/users")
-                        .permitAll()
+                        // Protege TODAS las rutas users
+                        .requestMatchers("/users/**")
+                        .authenticated()
+
+                        // Todo lo demás también protegido
                         .anyRequest()
                         .authenticated()
                 )
